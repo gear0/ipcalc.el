@@ -162,19 +162,15 @@
          (broadcast-binary (ipcalc-host+1 (ipcalc-host-max net-binary cidr)))
          (broadcast-ip (ipcalc-binary-to-ip broadcast-binary))
          (buffer "*ipcalc*"))
-    (if (get-buffer buffer)
-        (kill-buffer buffer))
-    (pop-to-buffer buffer)
-    (insert
-     (format "Address:%15s%41s\n" ip ip-in-binary)
-     (format "Netmask:%16s = %2s %34s\n" netmask cidr cidr-binary)
-     (format "Wildcard:%11s%44s\n" wildcard-ip wildcard-binary)
-     (format "=>\nNetwork:%14s%42s\n" net-ip (ipcalc-network ip cidr))
-     (format "HostMin:%14s%42s\n" host-min-ip host-min-binary)
-     (format "HostMax:%16s%40s\n" host-max-ip host-max-binary)
-     (format "Broadcast:%14s%40s\n" broadcast-ip broadcast-binary)
-     (format "Hosts/Net: %d\n" (ipcalc-hosts/net cidr-int)))))
+    (if current-prefix-arg
+        (insert
+         (format "|%15s|%16s|%4s|%14s|%14s|%16s|%14s|%9s|\n" "IP" "Netmask" "CIDR" "Netz" "Host-Min" "Host-Max" "Broadcast" "# Clients")
+         (format "|%15s|%16s|%4s|%14s|%14s|%16s|%14s|%9d|\n" ip netmask cidr net-ip host-min-ip host-max-ip broadcast-ip (ipcalc-hosts/net cidr-int)))
+        (insert
+         (format "|%15s|%16s|%4s|%14s|%14s|%16s|%14s|%9d|\n" ip netmask cidr net-ip host-min-ip host-max-ip broadcast-ip (ipcalc-hosts/net cidr-int)))
+      )
+    ))
 
-(provide 'ipcalc)
+(provide 'gear0/ipcalc)
 
 ;;; ipcalc.el ends here
